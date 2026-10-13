@@ -37,11 +37,11 @@ html,body{height:100%;background:var(--navy);background-image:radial-gradient(ci
 const pages=[...document.querySelectorAll('.page')],N=pages.length;let cur=0;
 pages.forEach((p,i)=>p.style.zIndex=N-i);
 const src=document.getElementById('src');const upd=()=>src.hidden=cur!==N-1;
-function next(){if(cur>=N-1)return;pages[cur].classList.add('turned');cur++;upd()}
-function prev(){if(cur<=0)return;cur--;pages[cur].classList.remove('turned');upd()}
+const stopVid=()=>document.querySelectorAll('video').forEach(v=>v.pause());
+function next(){if(cur>=N-1)return;stopVid();pages[cur].classList.add('turned');cur++;upd()}
+function prev(){if(cur<=0)return;stopVid();cur--;pages[cur].classList.remove('turned');upd()}
 const fs=()=>{try{const r=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();r&&r.catch&&r.catch(()=>{})}catch(e){}};
 document.getElementById('book').onclick=e=>{if(e.target.closest('video'))return;next()};
-document.querySelectorAll('.page').forEach((p,i)=>p.addEventListener('transitionstart',()=>p.querySelectorAll('video').forEach(v=>v.pause())));
 document.addEventListener('keydown',e=>{
  if(e.target.closest&&e.target.closest('video')&&e.key===' ')return;
  if([' ','ArrowLeft','PageDown','Enter'].includes(e.key)){e.preventDefault();next()}
